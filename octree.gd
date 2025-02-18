@@ -212,9 +212,9 @@ func fill_aabb(pos_a: Vector3i, pos_b: Vector3i, depth: int, new_val: bool):
 		# not(i & 2)		means i is in bottom
 		# not(pos_a.y >> depth) if i & 2 else pos_b.y >> depth		means if it extends to the side that i is on
 		# pos_b.y >> depth if i & 2 else not(pos_a.y >> depth)		means if it does not extend to the side that i is on
-		if not(pos_b.x >> depth) if i & 1 else pos_a.x >> depth: continue
+		if not(pos_b.x >> depth) if i & 4 else pos_a.x >> depth: continue
 		if not(pos_b.y >> depth) if i & 2 else pos_a.y >> depth: continue
-		if not(pos_b.z >> depth) if i & 4 else pos_a.z >> depth: continue
+		if not(pos_b.z >> depth) if i & 1 else pos_a.z >> depth: continue
 		# code executing here is garenteed to have an i that is inside the aabb
 		
 		var elm: OctTree = get_elm(i)
@@ -233,7 +233,7 @@ func fill_aabb(pos_a: Vector3i, pos_b: Vector3i, depth: int, new_val: bool):
 			
 			var next_pos_a: Vector3i = Vector3i()
 			var next_pos_b: Vector3i = Vector3i()
-			if i & 1:
+			if i & 4:
 				next_pos_a.x = max(pos_a.x - (1<<depth), 0)
 				next_pos_b.x = max(pos_b.x - (1<<depth), 1)
 			else:
@@ -245,7 +245,7 @@ func fill_aabb(pos_a: Vector3i, pos_b: Vector3i, depth: int, new_val: bool):
 			else:
 				next_pos_a.y = min(pos_a.y, (1<<depth)-1)
 				next_pos_b.y = min(pos_b.y, 1<<depth)
-			if i & 4:
+			if i & 1:
 				next_pos_a.z = max(pos_a.z - (1<<depth), 0)
 				next_pos_b.z = max(pos_b.z - (1<<depth), 1)
 			else:
